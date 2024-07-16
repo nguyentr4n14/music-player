@@ -63,9 +63,9 @@ const app = {
         }
     ],
     render: function() {
-        const html = this.song.map(song => {
+        const html = this.song.map((song, index) => {
             return `
-                <div class="song">
+                <div class="song ${index === this.currentIndex? 'active' : '' }">
                     <div class="thumb" style="background-image: url('${song.image}')">
                     </div>
                     <div class="body">
@@ -154,6 +154,7 @@ const app = {
                 _this.nextSong()
             }
             audio.play()
+            _this.render()
         }
 
         // Khi prev bài hát
@@ -164,6 +165,7 @@ const app = {
                 _this.prevSong()
             }
             audio.play()
+            _this.render()
         }
 
         // Khi bật / tắt random bài hát
@@ -193,17 +195,27 @@ const app = {
         audio.src = this.currentSong.path
     },
     nextSong: function() {
+        let songs = $$(".song")
+        songs[this.currentIndex].classList.remove("active")
+
         this.currentIndex++
         if (this.currentIndex >= this.song.length) {
             this.currentIndex = 0
         }
+
+        songs[this.currentIndex].classList.add("active")
         this.loadCurrentSong()
     },
     prevSong: function() {
+        let songs = $$(".song")
+        songs[this.currentIndex].classList.remove("active")
+
         this.currentIndex--
         if (this.currentIndex < 0) {
             this.currentIndex = this.song.length - 1
         }
+
+        songs[this.currentIndex].classList.add("active")
         this.loadCurrentSong()
     },
     playRandomSong: function() {
