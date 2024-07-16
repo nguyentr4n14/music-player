@@ -39,7 +39,7 @@ const app = {
         },
         {
             name: "Tình Yêu Không Thể Phá Vỡ",
-            singer: "John Legend",
+            singer: "DICKSON",
             path: "./assets/music/tinhYeuKhongThePhaVo.mp3",
             image: "./assets/images/tinhYeuKhongThePhaVo.jpg"
         },
@@ -155,6 +155,7 @@ const app = {
             }
             audio.play()
             _this.render()
+            _this.scrollToActiveSong()
         }
 
         // Khi prev bài hát
@@ -166,6 +167,7 @@ const app = {
             }
             audio.play()
             _this.render()
+            _this.scrollToActiveSong()
         }
 
         // Khi bật / tắt random bài hát
@@ -188,6 +190,22 @@ const app = {
                 nextBtn.click()
             }
         }
+    },
+    scrollToActiveSong: function() {
+        setTimeout(() => {
+            const activeSong = $(".song.active");
+            if (this.currentIndex === 0) {
+                activeSong.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+            } else {
+                activeSong.scrollIntoView({
+                    behavior: "smooth",
+                    block: "nearest"
+                });
+            }
+        }, 300);
     },
     loadCurrentSong: function() {
         heading.textContent = this.currentSong.name
