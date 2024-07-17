@@ -123,6 +123,10 @@ header h2 {
   display: none;
 }
 
+.volume-box .volume.show {
+  display: block;
+}
+
 .progress {
   width: 100%;
   -webkit-appearance: none;

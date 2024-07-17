@@ -16,7 +16,7 @@ const randomBtn = $(".btn-random")
 const repeatBtn = $(".btn-repeat")
 const playlist = $(".playlist")
 const volumeBtn = $(".btn-volume")
-const volume = $(".volume")
+const volume = $("#volume")
 
 const app = {
     currentIndex: 0,
@@ -226,11 +226,7 @@ const app = {
 
         // Bật / tắt volume bar khi ấn vào volume icon
         volumeBtn.onclick = function() {
-            if (volume.style.display === 'none') {
-                volume.style.display = 'block';
-              } else {
-                volume.style.display = 'none';
-              }
+            volume.classList.toggle("show");
         }
 
          // Xử lý khi thay đổi volume
