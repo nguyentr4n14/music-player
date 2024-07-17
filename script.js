@@ -1,6 +1,8 @@
 const $ = document.querySelector.bind(document)
 const $$ = document.querySelectorAll.bind(document)
 
+const PLAYER_STORAGE_KEY = 'MY_PLAYER'
+
 const player = $(".player")
 const cd = $(".cd")
 const heading = $("header h2")
@@ -12,12 +14,14 @@ const prevBtn = $(".btn-prev")
 const nextBtn = $(".btn-next")
 const randomBtn = $(".btn-random")
 const repeatBtn = $(".btn-repeat")
+const playlist = $(".playlist")
 
 const app = {
     currentIndex: 0,
     isPlaying: false,
     isRandom: false,
     isRepeat: false,
+    config: {},
     song: [
         {
             name: "All of Me",
@@ -62,10 +66,14 @@ const app = {
             image: "./assets/images/ngayDepTroiDeNoiChiaTay.jpg"
         }
     ],
+    setConfig: function(key, value) {
+        this.config[key] = value
+        localStorage.setItem(PLAYER_STORAGE_KEY, JSON.stringify(this.config))
+    },
     render: function() {
         const html = this.song.map((song, index) => {
             return `
-                <div class="song ${index === this.currentIndex? 'active' : '' }">
+                <div class="song ${index === this.currentIndex? 'active' : '' }" data-index="${index}">
                     <div class="thumb" style="background-image: url('${song.image}')">
                     </div>
                     <div class="body">
@@ -78,7 +86,7 @@ const app = {
                 </div>
             `
         })
-        $(".playlist").innerHTML = html.join("")
+        playlist.innerHTML = html.join("")
     },
     defineProperties: function() {
         Object.defineProperty(this, "currentSong", {
@@ -173,12 +181,14 @@ const app = {
         // Khi bật / tắt random bài hát
         randomBtn.onclick = function() {
             _this.isRandom = !_this.isRandom
+            _this.setConfig("isRandom", _this.isRandom)
             randomBtn.classList.toggle("active", _this.isRandom)
         }
 
         // Xử lý lặp lại một bài hát
         repeatBtn.onclick = function(e) {
             _this.isRepeat = !_this.isRepeat
+            _this.setConfig("isRepeat", _this.isRepeat)
             repeatBtn.classList.toggle("active", _this.isRepeat)
         }
 
@@ -188,6 +198,27 @@ const app = {
                 audio.play()
             } else {
                 nextBtn.click()
+            }
+        }
+
+        // Lắng nghe hành vi click vào playlist
+        playlist.onclick = function(e) {
+            const songNode = e.target.closest(".song:not(.active)")
+
+            if (songNode || e.target.closest(".option")) {
+                // Xử lý khi click vào song
+                if (songNode) {
+                    let songs = $$(".song")
+                    songs[_this.currentIndex].classList.remove("active")
+                    _this.currentIndex = Number(songNode.dataset.index)
+                    _this.loadCurrentSong()
+                    audio.play()
+                    songNode.classList.add("active")
+                }   
+                // Xử lý khi click vào option
+                if (e.target.closest(".option")) {
+                    
+                }
             }
         }
     },
@@ -211,6 +242,12 @@ const app = {
         heading.textContent = this.currentSong.name
         cdThumb.style.backgroundImage = `url('${this.currentSong.image}')`
         audio.src = this.currentSong.path
+    },
+    loadConfig: function() {
+        const config = JSON.parse(localStorage.getItem(PLAYER_STORAGE_KEY)) || {}
+        this.isRandom = config.isRandom || false
+        this.isRepeat = config.isRepeat || false
+        this.config = config
     },
     nextSong: function() {
         let songs = $$(".song")
@@ -246,6 +283,9 @@ const app = {
         this.loadCurrentSong()
     },
     start: function() {
+        // Gán cấu hình từ config vào ứng dụng
+        this.loadConfig()
+
         // Định nghĩa các thuộc tính cho object
         this.defineProperties()
 
@@ -257,6 +297,11 @@ const app = {
 
         // Render playlist
         this.render()
+
+        // Hiển thị trạng thái ban đầu của button repeat và random
+        randomBtn.classList.toggle("active", this.isRandom)
+        repeatBtn.classList.toggle("active", this.isRepeat)
+
     }
 }
 
