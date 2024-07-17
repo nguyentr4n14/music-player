@@ -188,3 +188,8 @@ header h2 {
   color: #999;
   font-size: 18px;
 }
+
+.song .title:hover,
+.song .author:hover {
+  cursor: default;
+}
