@@ -3,7 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Music player</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
+    <script src="https://kit.fontawesome.com/e4f7b1c3b0.js" crossorigin="anonymous"></script>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./assets/css/style.css">
@@ -45,7 +45,14 @@
           </div>
       
           <input id="progress" class="progress" type="range" value="0" step="1" min="0" max="100">
-      
+          
+          <div class="volume-box">
+            <div class="btn btn-volume">
+              <i class="fa-solid fa-volume-high icon-volume"></i>
+            </div>
+            <input type="range" id="volume" class="volume" value="0" step="10" min="0" max="100" id="">
+          </div>
+
           <audio id="audio" src=""></audio>
         </div>
       

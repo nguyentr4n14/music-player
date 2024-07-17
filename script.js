@@ -15,6 +15,8 @@ const nextBtn = $(".btn-next")
 const randomBtn = $(".btn-random")
 const repeatBtn = $(".btn-repeat")
 const playlist = $(".playlist")
+const volumeBtn = $(".btn-volume")
+const volume = $(".volume")
 
 const app = {
     currentIndex: 0,
@@ -221,6 +223,20 @@ const app = {
                 }
             }
         }
+
+        // Bật / tắt volume bar khi ấn vào volume icon
+        volumeBtn.onclick = function() {
+            if (volume.style.display === 'none') {
+                volume.style.display = 'block';
+              } else {
+                volume.style.display = 'none';
+              }
+        }
+
+         // Xử lý khi thay đổi volume
+         volume.oninput = function(e) {
+            audio.volume = e.target.value / 100
+        }
     },
     scrollToActiveSong: function() {
         setTimeout(() => {
@@ -302,6 +318,10 @@ const app = {
         randomBtn.classList.toggle("active", this.isRandom)
         repeatBtn.classList.toggle("active", this.isRepeat)
 
+        // Set default volume to 50
+        const defaultVolume = 50; 
+        audio.volume = defaultVolume / 100; 
+        volume.value = defaultVolume; 
     }
 }
 
