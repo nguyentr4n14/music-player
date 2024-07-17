@@ -92,6 +92,11 @@ header h2 {
   font-size: 18px;
 }
 
+.btn:hover {
+  cursor: pointer;
+  opacity: 80%;
+}
+
 .control .btn.active {
   color: var(--primary-color);
 }
