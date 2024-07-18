@@ -165,7 +165,6 @@ const app = {
                 _this.nextSong()
             }
             audio.play()
-            // _this.render()
             _this.scrollToActiveSong()
         }
 
@@ -177,7 +176,6 @@ const app = {
                 _this.prevSong()
             }
             audio.play()
-            // _this.render()
             _this.scrollToActiveSong()
         }
 
@@ -292,6 +290,9 @@ const app = {
         this.loadCurrentSong()
     },
     playRandomSong: function() {
+        let songs = $$(".song")
+        songs[this.currentIndex].classList.remove("active")
+
         // Shuffle the songs array again if it is empty
         if (this.shuffledSongs.length === 0) {
             this.shuffleSongs();
@@ -301,6 +302,8 @@ const app = {
         
         // Update the current index and load the song
         this.currentIndex = this.song.indexOf(nextSong);
+
+        songs[this.currentIndex].classList.add("active")
         this.loadCurrentSong()
     },
     shuffleSongs: function() {
