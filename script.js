@@ -68,6 +68,7 @@ const app = {
             image: "./assets/images/ngayDepTroiDeNoiChiaTay.jpg"
         }
     ],
+    shuffledSongs: [],
     setConfig: function(key, value) {
         this.config[key] = value
         localStorage.setItem(PLAYER_STORAGE_KEY, JSON.stringify(this.config))
@@ -164,7 +165,7 @@ const app = {
                 _this.nextSong()
             }
             audio.play()
-            _this.render()
+            // _this.render()
             _this.scrollToActiveSong()
         }
 
@@ -176,7 +177,7 @@ const app = {
                 _this.prevSong()
             }
             audio.play()
-            _this.render()
+            // _this.render()
             _this.scrollToActiveSong()
         }
 
@@ -185,6 +186,11 @@ const app = {
             _this.isRandom = !_this.isRandom
             _this.setConfig("isRandom", _this.isRandom)
             randomBtn.classList.toggle("active", _this.isRandom)
+            if (_this.isRandom) {
+                _this.shuffleSongs()
+            } else {
+                _this.shuffledSongs = [];
+            }
         }
 
         // Xử lý lặp lại một bài hát
@@ -286,13 +292,24 @@ const app = {
         this.loadCurrentSong()
     },
     playRandomSong: function() {
-        let newIndex
-        do {
-            newIndex = Math.floor(Math.random() * this.song.length)
-        } while (newIndex === this.currentIndex)
-
-        this.currentIndex = newIndex
+        // Shuffle the songs array again if it is empty
+        if (this.shuffledSongs.length === 0) {
+            this.shuffleSongs();
+        }
+        // Get the next song from the shuffled array
+        const nextSong = this.shuffledSongs.shift();
+        
+        // Update the current index and load the song
+        this.currentIndex = this.song.indexOf(nextSong);
         this.loadCurrentSong()
+    },
+    shuffleSongs: function() {
+        // Fisher–Yates shuffle Algorithm
+        this.shuffledSongs = [...this.song];
+        for (let i = this.shuffledSongs.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [this.shuffledSongs[i], this.shuffledSongs[j]] = [this.shuffledSongs[j], this.shuffledSongs[i]];
+        }
     },
     start: function() {
         // Gán cấu hình từ config vào ứng dụng
